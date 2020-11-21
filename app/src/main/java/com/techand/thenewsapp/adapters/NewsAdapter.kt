@@ -11,7 +11,7 @@ import com.techand.thenewsapp.R
 import com.techand.thenewsapp.models.Article
 import kotlinx.android.synthetic.main.item_article_preview.view.*
 
-class NewsdAdapter : RecyclerView.Adapter<NewsdAdapter.ArticleViewHolder>() {
+class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     inner class ArticleViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 

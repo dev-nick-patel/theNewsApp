@@ -1,7 +1,7 @@
 package com.techand.thenewsapp.api
 
+import com.techand.thenewsapp.BuildConfig
 import com.techand.thenewsapp.models.NewsResponse
-import com.techand.thenewsapp.util.Constants.Companion.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,7 +16,7 @@ interface NewsAPI {
         @Query("page")
         pageNumber: Int = 1,
         @Query("apiKey")
-        apiKey: String = API_KEY
+        apiKey: String = BuildConfig.API_KEY
     ): Response<NewsResponse>
 
     @GET("v2/everything")
@@ -26,6 +26,6 @@ interface NewsAPI {
         @Query("page")
         pageNumber: Int = 1,
         @Query("apiKey")
-        apiKey: String = API_KEY
+        apiKey: String = BuildConfig.API_KEY
     ): Response<NewsResponse>
 }
