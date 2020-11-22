@@ -97,7 +97,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getBreakingNews("us")
+                viewModel.getBreakingNews("au")
                 isScrolling = false
             }
 
