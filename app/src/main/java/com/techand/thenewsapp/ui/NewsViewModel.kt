@@ -11,6 +11,7 @@ import com.techand.thenewsapp.NewsApplication
 import com.techand.thenewsapp.models.Article
 import com.techand.thenewsapp.models.NewsResponse
 import com.techand.thenewsapp.repository.NewsRepository
+import com.techand.thenewsapp.util.Constants.Companion.DEFAULT_COUNTRY
 import com.techand.thenewsapp.util.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -21,7 +22,7 @@ class NewsViewModel(
     val newsRepository: NewsRepository
 ): AndroidViewModel(app){
 
-    val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
 
     var breakingNewsResponse: NewsResponse? = null
@@ -31,12 +32,25 @@ class NewsViewModel(
     var searchNewsResponse: NewsResponse? = null
 
     init {
-        getBreakingNews("au")
+        getBreakingNews(DEFAULT_COUNTRY)
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
-        safeBreakingNewsCall(countryCode)
+        if (countryCode != DEFAULT_COUNTRY)
+        {
+            reInitialiseVariable(countryCode)
+            safeBreakingNewsCall(countryCode)
+
+        }else safeBreakingNewsCall(countryCode)
     }
+
+    private fun reInitialiseVariable(countryCode: String) {
+        breakingNewsResponse = null
+        breakingNews.postValue(null)
+        breakingNewsPage = 1
+        DEFAULT_COUNTRY = countryCode
+    }
+
     fun searchNews(searchQuery: String) = viewModelScope.launch {
         safeSearchNewsCall(searchQuery)
     }

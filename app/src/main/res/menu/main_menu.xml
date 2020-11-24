@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_filter"
+        android:title="@string/action_filter">
+
+            <menu>
+                <item
+                    android:id="@+id/btn_india"
+                    android:title="India"></item>
+                <item
+                    android:id="@+id/btn_aus"
+                    android:title="Australia"></item>
+                <item
+                    android:id="@+id/btn_us"
+                    android:title="USA"></item>
+            </menu>
+
+    </item>
+</menu>

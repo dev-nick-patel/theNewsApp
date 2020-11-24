@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TheNewsApp</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_india">Now streaming Indian news</string>
+    <string name="action_aus">Now streaming Australia news</string>
+    <string name="action_us">Now streaming United States news</string>
 </resources>
