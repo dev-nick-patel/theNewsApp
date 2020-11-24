@@ -1,16 +1,13 @@
 package com.techand.thenewsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,8 +27,7 @@ import kotlinx.android.synthetic.main.fragment_breaking_news.*
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
     lateinit var viewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
-    val TAG = "BreakingNewsFragment"
+    private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,27 +35,25 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu,menu)
+        inflater.inflate(R.menu.main_menu, menu)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-
-            R.id.btn_india ->{
+        return when (item.itemId) {
+            R.id.btn_india -> {
                 newsAdapter.differ.submitList(null)
                 viewModel.getBreakingNews(INDIA)
                 isScrolling = false
                 view?.let { Snackbar.make(it, getString(R.string.action_india), Snackbar.LENGTH_SHORT).show() }
                 true
             }
-            R.id.btn_aus ->{
+            R.id.btn_aus -> {
                 view?.let { Snackbar.make(it, getString(R.string.action_aus), Snackbar.LENGTH_SHORT).show() }
                 newsAdapter.differ.submitList(null)
                 viewModel.getBreakingNews(AUSTRALIA)
                 isScrolling = false
                 true
             }
-            R.id.btn_us ->{
+            R.id.btn_us -> {
                 view?.let { Snackbar.make(it, getString(R.string.action_us), Snackbar.LENGTH_SHORT).show() }
                 newsAdapter.differ.submitList(null)
                 viewModel.getBreakingNews(USA)
@@ -69,9 +63,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
             else -> super.onOptionsItemSelected(item)
         }
-
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
@@ -82,16 +74,14 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 putSerializable("article", it)
             }
             findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment, bundle
+                    R.id.action_breakingNewsFragment_to_articleFragment, bundle
             )
         }
 
-
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.breakingNews.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
-
                     response.data?.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
@@ -104,11 +94,11 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let { message ->
-                        Toast.makeText(activity,"An error occured: $message",Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "An error occured: $message", Toast.LENGTH_LONG).show()
                     }
                 }
+                is Resource.Loading -> showProgressBar()
             }
-
         })
     }
 
@@ -126,7 +116,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     var isLastPage = false
     var isScrolling = false
 
-    val scrollListener = object : RecyclerView.OnScrollListener() {
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
@@ -141,7 +131,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             val isNotAtBeginning = firstVisibleItemPosition >= 0
             val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
             val shouldPaginate =
-                isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
+                    isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
                 viewModel.getBreakingNews(DEFAULT_COUNTRY)
